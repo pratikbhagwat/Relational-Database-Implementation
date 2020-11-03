@@ -1,0 +1,54 @@
+CREATE TABLE `Users` (
+  `username` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(50) NOT NULL,
+  `firstname` VARCHAR(50) NOT NULL,
+  `lastname` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`username`));
+
+CREATE TABLE `Products` (
+  `productid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(500) NULL,
+  `price` DOUBLE UNSIGNED NOT NULL,
+  `stock` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`productid`));
+
+CREATE TABLE `Reviews` (
+`username` VARCHAR(100) NOT NULL,
+`productid` INT UNSIGNED NOT NULL,
+`reviewtext` VARCHAR(500) NOT NULL,
+`date` DATE NULL,
+`rating` ENUM('1', '2', '3', '4', '5') NOT NULL,
+PRIMARY KEY (`username`, `productid`),
+INDEX `fk1_idx` (`productid` ASC),
+CONSTRAINT `fk2`
+  FOREIGN KEY (`username`)
+  REFERENCES `Users` (`username`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+CONSTRAINT `fk1`
+  FOREIGN KEY (`productid`)
+  REFERENCES `Products` (`productid`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION);
+
+
+CREATE TABLE `Orders` (
+  `orderid` BIGINT(13) NOT NULL,
+  `username` VARCHAR(100) NOT NULL,
+  `productid` INT UNSIGNED NOT NULL,
+  `quantity` INT UNSIGNED NOT NULL,
+  `date` DATE NOT NULL,
+  PRIMARY KEY (`orderid`, `username`, `productid`),
+  INDEX `fk1_orders_users_idx` (`username` ASC),
+  INDEX `fk2_orders_products_idx` (`productid` ASC),
+  CONSTRAINT `fk1_orders_users`
+    FOREIGN KEY (`username`)
+    REFERENCES `Users` (`username`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk2_orders_products`
+    FOREIGN KEY (`productid`)
+    REFERENCES `Products` (`productid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
